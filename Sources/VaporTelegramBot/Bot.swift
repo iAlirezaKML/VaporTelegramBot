@@ -2,9 +2,6 @@ import Foundation
 import SwiftyJSON
 import Vapor
 import HTTP
-import Types
-
-
 
 
 public class TelegramBot {

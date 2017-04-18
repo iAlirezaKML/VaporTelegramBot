@@ -2,20 +2,19 @@ import Foundation
 import SwiftyJSON
 import Vapor
 import HTTP
-import Types
 
 
 extension TelegramBot {
 	public func request(_ name: String,
 	                    json: SwiftyJSON.JSON = SwiftyJSON.JSON([:])
-		) throws -> Types.Response {
+		) throws -> Response {
 		guard let json = try drop.client.post(url, query: json.dictionaryValue).json?.toSwiftyJSON() else {
 			throw Error.badResponse
 		}
-		return Types.Response(json: json)
+		return Response(json: json)
 	}
 	
-	public func request(_ method: Method) throws -> Types.Response {
+	public func request(_ method: Method) throws -> Response {
 		return try request(method.name, json: method.parameters(for: .request))
 	}
 	
@@ -26,13 +25,13 @@ extension TelegramBot {
 	
 	/// A simple method for testing your bot's auth token. Requires no parameters. Returns basic information about the bot in form of a User object.
 	///
-	public func getMe() throws -> Types.User {
+	public func getMe() throws -> User {
 		let method = Method.getMe
 		let response = try request(method)
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.User(json: response.result)
+		let result = User(json: response.result)
 		return result
 	}
 	
@@ -48,7 +47,7 @@ extension TelegramBot {
 	public func getUserProfilePhotos(userId: Int,
 	                                 offset: Int? = nil,
 	                                 limit: Int? = nil
-		) throws -> Types.UserProfilePhotos {
+		) throws -> UserProfilePhotos {
 		let method = Method.getUserProfilePhotos(userId: userId,
 		                                         offset: offset,
 		                                         limit: limit)
@@ -56,7 +55,7 @@ extension TelegramBot {
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.UserProfilePhotos(json: response.result)
+		let result = UserProfilePhotos(json: response.result)
 		return result
 	}
 	
@@ -67,13 +66,13 @@ extension TelegramBot {
 	/// - Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received.
 	/// - Parameter fileId: File identifier to get info about
 	public func getFile(fileId: String
-		) throws -> Types.File {
+		) throws -> File {
 		let method = Method.getFile(fileId: fileId)
 		let response = try request(method)
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.File(json: response.result)
+		let result = File(json: response.result)
 		return result
 	}
 	
@@ -140,13 +139,13 @@ extension TelegramBot {
 	///
 	/// - Parameter chatId: Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
 	public func getChat(chatId: String
-		) throws -> Types.Chat {
+		) throws -> Chat {
 		let method = Method.getChat(chatId: chatId)
 		let response = try request(method)
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.Chat(json: response.result)
+		let result = Chat(json: response.result)
 		return result
 	}
 	
@@ -157,13 +156,13 @@ extension TelegramBot {
 	///
 	/// - Parameter chatId: Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
 	public func getChatAdministrators(chatId: String
-		) throws -> [Types.ChatMember] {
+		) throws -> [ChatMember] {
 		let method = Method.getChatAdministrators(chatId: chatId)
 		let response = try request(method)
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = response.result.arrayValue.map({ Types.ChatMember(json: $0) })
+		let result = response.result.arrayValue.map({ ChatMember(json: $0) })
 		return result
 	}
 	
@@ -195,14 +194,14 @@ extension TelegramBot {
 	///   - userId: Unique identifier of the target user
 	public func getChatMember(chatId: String,
 	                          userId: Int
-		) throws -> Types.ChatMember {
+		) throws -> ChatMember {
 		let method = Method.getChatMember(chatId: chatId,
 		                                  userId: userId)
 		let response = try request(method)
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.ChatMember(json: response.result)
+		let result = ChatMember(json: response.result)
 		return result
 	}
 	
@@ -256,8 +255,8 @@ extension TelegramBot {
 	                        disableWebPagePreview: Bool? = nil,
 	                        disableNotification: Bool? = nil,
 	                        replyToMessageId: Int? = nil,
-	                        replyMarkup: Types.ReplyMarkup? = nil
-		) throws -> Types.Message {
+	                        replyMarkup: ReplyMarkup? = nil
+		) throws -> Message {
 		let method = Method.sendMessage(chatId: chatId,
 		                                text: text,
 		                                parseMode: parseMode,
@@ -269,7 +268,7 @@ extension TelegramBot {
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.Message(json: response.result)
+		let result = Message(json: response.result)
 		return result
 	}
 
@@ -286,7 +285,7 @@ extension TelegramBot {
 	                           fromChatId: String,
 	                           messageId: Int,
 	                           disableNotification: Bool? = nil
-		) throws -> Types.Message {
+		) throws -> Message {
 		let method = Method.forwardMessage(chatId: chatId,
 		                                   fromChatId: fromChatId,
 		                                   messageId: messageId,
@@ -295,7 +294,7 @@ extension TelegramBot {
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.Message(json: response.result)
+		let result = Message(json: response.result)
 		return result
 	}
 	
@@ -316,8 +315,8 @@ extension TelegramBot {
 	                         longitude: Double,
 	                         disableNotification: Bool? = nil,
 	                         replyToMessageId: Int? = nil,
-	                         replyMarkup: Types.ReplyMarkup? = nil
-		) throws -> Types.Message {
+	                         replyMarkup: ReplyMarkup? = nil
+		) throws -> Message {
 		let method = Method.sendLocation(chatId: chatId,
 		                                 latitude: latitude,
 		                                 longitude: longitude,
@@ -328,7 +327,7 @@ extension TelegramBot {
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.Message(json: response.result)
+		let result = Message(json: response.result)
 		return result
 	}
 	
@@ -355,8 +354,8 @@ extension TelegramBot {
 	                      foursquareId: String? = nil,
 	                      disableNotification: Bool? = nil,
 	                      replyToMessageId: Int? = nil,
-	                      replyMarkup: Types.ReplyMarkup? = nil
-		) throws -> Types.Message {
+	                      replyMarkup: ReplyMarkup? = nil
+		) throws -> Message {
 		let method = Method.sendVenue(chatId: chatId,
 		                              latitude: latitude,
 		                              longitude: longitude,
@@ -370,7 +369,7 @@ extension TelegramBot {
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.Message(json: response.result)
+		let result = Message(json: response.result)
 		return result
 	}
 	
@@ -393,8 +392,8 @@ extension TelegramBot {
 	                        lastName: String? = nil,
 	                        disableNotification: Bool? = nil,
 	                        replyToMessageId: Int? = nil,
-	                        replyMarkup: Types.ReplyMarkup? = nil
-		) throws -> Types.Message {
+	                        replyMarkup: ReplyMarkup? = nil
+		) throws -> Message {
 		let method = Method.sendContact(chatId: chatId,
 		                                phoneNumber: phoneNumber,
 		                                firstName: firstName,
@@ -406,7 +405,7 @@ extension TelegramBot {
 		guard response.ok else {
 			throw Error.requestFailed(response.description)
 		}
-		let result = Types.Message(json: response.result)
+		let result = Message(json: response.result)
 		return result
 	}
 	
@@ -419,7 +418,7 @@ extension TelegramBot {
 	///   - chatId: Unique identifier for the target chat or username of the target channel (in the format @channelusername)
 	///   - action: Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_audio or upload_audio for audio files, upload_document for general files, find_location for location data.
 	public func sendChatAction(chatId: String,
-	                           action: Types.ChatAction
+	                           action: ChatAction
 		) throws -> Bool {
 		let method = Method.sendChatAction(chatId: chatId,
 		                                   action: action)

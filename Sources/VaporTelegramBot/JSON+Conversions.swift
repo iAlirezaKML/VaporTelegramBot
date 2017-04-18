@@ -2,8 +2,6 @@ import Foundation
 import SwiftyJSON
 import Vapor
 
-
-
 public extension SwiftyJSON.JSON {
 	public init(_ json: Vapor.JSON) throws {
 		self.init(data: Data.init(bytes: try json.makeBytes()))

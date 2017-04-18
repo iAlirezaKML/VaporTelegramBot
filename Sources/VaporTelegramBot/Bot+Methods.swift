@@ -2,7 +2,6 @@ import Foundation
 import SwiftyJSON
 import Vapor
 import HTTP
-import Types
 
 
 extension TelegramBot {
@@ -123,7 +122,7 @@ extension TelegramBot {
 			disableWebPagePreview: Bool?,
 			disableNotification: Bool?,
 			replyToMessageId: Int?,
-			replyMarkup: Types.ReplyMarkup?)
+			replyMarkup: ReplyMarkup?)
 
 		
 		
@@ -156,7 +155,7 @@ extension TelegramBot {
 			longitude: Double,
 			disableNotification: Bool?,
 			replyToMessageId: Int?,
-			replyMarkup: Types.ReplyMarkup?)
+			replyMarkup: ReplyMarkup?)
 		
 		
 		
@@ -181,7 +180,7 @@ extension TelegramBot {
 			foursquareId: String?,
 			disableNotification: Bool?,
 			replyToMessageId: Int?,
-			replyMarkup: Types.ReplyMarkup?)
+			replyMarkup: ReplyMarkup?)
 		
 		
 		
@@ -202,7 +201,7 @@ extension TelegramBot {
 			lastName: String?,
 			disableNotification: Bool?,
 			replyToMessageId: Int?,
-			replyMarkup: Types.ReplyMarkup?)
+			replyMarkup: ReplyMarkup?)
 		
 		
 		
@@ -211,7 +210,7 @@ extension TelegramBot {
 		/// - Note: Example: The ImageBot needs some time to process a request and upload the image. Instead of sending a text message along the lines of “Retrieving image, please wait…”, the bot may use sendChatAction with action = upload_photo. The user will see a “sending photo” status for the bot.
 		///   - chatId: Unique identifier for the target chat or username of the target channel (in the format @channelusername)
 		///   - action: Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_audio or upload_audio for audio files, upload_document for general files, find_location for location data.
-		case sendChatAction(chatId: String, action: Types.ChatAction)
+		case sendChatAction(chatId: String, action: ChatAction)
 		
 		
 		

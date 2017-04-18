@@ -14,6 +14,17 @@ import Foundation
 import SwiftyJSON
 
 extension SwiftyJSON.JSON {
+	init(optionalDict: [String: Any?]) {
+		var dictionary = [String: Any]()
+		
+		for (key, json) in optionalDict {
+			if let json = json {
+				dictionary[key] = json
+			}
+		}
+		self.init(dictionary as Any)
+	}
+	
     /// - Returns: True if json is empty or of unknown type
     public var isNullOrUnknown: Bool {
         return type == .null || type == .unknown
